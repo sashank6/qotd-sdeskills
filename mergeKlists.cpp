@@ -48,6 +48,22 @@ struct ListNode {
 
 };
 
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+/*
+
+Time Complexity is O(K*M) where m is the length of longest list.
+Space complexity is O(1)
+*/
+
+
 class Solution {
 public:
 	ListNode *merge(ListNode* l1, ListNode* l2) {
@@ -63,18 +79,14 @@ public:
 	}
 	ListNode* mergeKLists(vector<ListNode*>& lists) {
 
-		ListNode * new_head = 0;
 		int N = lists.size();
 		if (N == 0)
 			return 0;
-		if (N > 1) {
-			new_head = merge(lists[0], lists[1]);
-		} else {
-			new_head = lists[0];
+		while(N>1){
+			for(int i=0;i<N/2;i++)
+				lists[i] = merge(lists[i],lists[N-i-1]);
+			N=(N+1)/2;
 		}
-		for (int i = 2; i < N; i++) {
-			new_head = merge(new_head, lists[i]);
-		}
-		return new_head;
+		return lists[0];
 	}
 };
