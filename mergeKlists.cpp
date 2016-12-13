@@ -1,5 +1,3 @@
-// C++ program to print print all primes smaller than
-// n using segmented sieve
 //#include <bits/stdc++.h>
 #include <map>
 #include <set>
