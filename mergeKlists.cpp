@@ -59,8 +59,17 @@ struct ListNode {
  
 /*
 
-Time Complexity is O(K*M) where m is the length of longest list.
 Space complexity is O(1)
+
+
+TC: Analysis
+Number of lists: K
+Total number of nodes N
+
+K/2*N/K + K/4*2*N/K + K/8*4*N/K...
+N/2+N/2+N/2....logk times
+
+Nlogk
 */
 
 
