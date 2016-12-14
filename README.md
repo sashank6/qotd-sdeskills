@@ -1,1 +1,1 @@
-# leetcode
+# qotd-sdeskills
