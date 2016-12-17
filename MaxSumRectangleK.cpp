@@ -9,8 +9,6 @@ public:
 			}
 		}
 		int maxsum = INT_MIN;
-		int rowtop = -1, rowbot = -1, colst = -1, colen = -1;
-
 		for (int start = 0; start < m; start++) {
 			for (int end = start; end < m; end++) {
 				int arr[n + 1] = { 0 };
