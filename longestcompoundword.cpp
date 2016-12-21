@@ -53,36 +53,6 @@ void dfs(node *r, string str) {
 	}
 }
 
-int count(node *root, string &str) {
-	if (root == 0)
-		return 0;
-	int ct = 0;
-	string mstr = "";
-	for (int i = 0; i < 26; i++) {
-		string s = "";
-		int value = 1 + count(root->links[i], s);
-		if (value > ct) {
-			ct = value;
-			mstr = s;
-		}
-	}
-	str = root->c + mstr;
-	return ct;
-}
-
-string max_suffix(node *root, string str) {
-	node *t = root;
-	for (int k = 0; k < str.length(); k++)
-		t = t->links[str[k] - 'a'];
-	string suffix = "";
-	count(t, suffix);
-	suffix = suffix.substr(1);
-	//cout<<"String: "<<str<<", "<<"Suffix: "<<suffix<<"Suffix length: "<<suffix.length()<<endl;
-	if (suffix.length() > 0)
-		return str + suffix;
-	return "";
-}
-
 string findLongestPrefix(node *root, string str) {
 	node *t = root;
 	string prefix = "";
