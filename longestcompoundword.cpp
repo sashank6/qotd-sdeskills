@@ -53,21 +53,9 @@ void dfs(node *r, string str) {
 	}
 }
 
-string findLongestPrefix(node *root, string str) {
+vector<string> findPrefixes(node *root, string str) {
+	vector<string> prefixes;
 	node *t = root;
-	string prefix = "";
-	string tmp = "";
-	for (int j = 0; j < str.length() - 1; j++) {
-		t = t->links[str[j] - 'a'];
-		tmp += t->c;
-		if (t->isEnd)
-			prefix = tmp;
-	}
-	return prefix;
-}
-string findLongestSuffix(node *root, string str) {
-	node *t = root;
-	string suffix = "";
 	string tmp = "";
 	for (int j = 0; j < str.length(); j++) {
 		t = t->links[str[j] - 'a'];
@@ -75,9 +63,9 @@ string findLongestSuffix(node *root, string str) {
 			break;
 		tmp += t->c;
 		if (t->isEnd)
-			suffix = tmp;
+			prefixes.push_back(tmp);
 	}
-	return suffix;
+	return prefixes;
 }
 
 node *buildTrie(vector<string> list) {
@@ -105,55 +93,56 @@ int main() {
 		list.push_back("dog");
 		list.push_back("nana");
 		list.push_back("walk");
-		list.push_back("walker");
+		list.push_back("walkers");
 		list.push_back("dogwalker");
+		list.push_back("dogwalk");
+		list.push_back("doge");
+		list.push_back("dogecatwalkers");
+//		list.push_back("cat");
+//		list.push_back("cats");
+//		list.push_back("catsdogcats");
+//		list.push_back("catxdogcatsrat");
+//		list.push_back("dog");
+//		list.push_back("dogcatsdog");
+//		list.push_back("hippopotamuses");
+//		list.push_back("rat");
+//		list.push_back("ratcat");
+//		list.push_back("ratcatdog");
+//		list.push_back("ratcatdogcat");
 		node *root = buildTrie(list);
 		string max_word = "";
+		queue<pair<string, string> > q;
 		for (int i = 0; i < list.size(); i++) {
-			string prefix = findLongestPrefix(root, list[i]);
-			string suffix = "";
-			if (prefix.length() > 0)
-				suffix = findLongestSuffix(root,
-						list[i].substr(prefix.length()));
-			if (prefix + suffix == list[i]) {
-				if (max_word.length() < list[i].length())
-					max_word = list[i];
+			vector<string> prefixes = findPrefixes(root, list[i]);
+			for (int j = 0; j < prefixes.size(); j++) {
+				if (prefixes[j] != list[i]) {
+					pair<string, string> tt = make_pair(list[i],
+							list[i].substr(prefixes[j].length()));
+					q.push(tt);
+				}
 
 			}
 		}
-		cout << max_word << endl;
-
-	}
-
-	{ //Test2 ‘cat’, ‘cats’, ‘catsdogcats’, ‘catxdogcatsrat’, ‘dog’, ‘dogcatsdog’, ‘hippopotamuses’, ‘rat’, ‘ratcat’, ‘ratcatdog’, ‘ratcatdogcat’
-		vector<string> list;
-		list.push_back("cat");
-		list.push_back("cats");
-		list.push_back("catsdogcats");
-		list.push_back("catxdogcatsrat");
-		list.push_back("dog");
-		list.push_back("dogcatsdog");
-		list.push_back("hippopotamuses");
-		list.push_back("rat");
-		list.push_back("ratcat");
-		list.push_back("ratcatdog");
-		list.push_back("ratcatdogcat");
-		node *root = buildTrie(list);
-		string max_word = "";
-		for (int i = 0; i < list.size(); i++) {
-			string prefix = findLongestPrefix(root, list[i]);
-			string suffix = "";
-			if (prefix.length() > 0)
-				suffix = findLongestSuffix(root,
-						list[i].substr(prefix.length()));
-			if (prefix + suffix == list[i]) {
-				if (max_word.length() < list[i].length())
-					max_word = list[i];
-
+		string maxword = "";
+		while (!q.empty()) {
+			pair<string, string> t = q.front();
+			if (t.second.length() == 0) {
+				if (maxword.length() < t.first.length())
+					maxword = t.first;
+			} else {
+				vector<string> prefixes = findPrefixes(root, t.second);
+				for (int j = 0; j < prefixes.size(); j++) {
+					q.push(
+							make_pair(t.first,
+									t.second.substr(prefixes[j].length())));
+				}
 			}
+			q.pop();
 		}
-		cout << max_word << endl;
+		cout << maxword << endl;
+
 	}
+
 	return 0;
 }
 
